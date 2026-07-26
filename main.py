@@ -9,7 +9,7 @@ from ultralytics import YOLO
 
 # Load the trained YOLOv8 model (license plate detection model)
 # best.pt is the trained weights file
-model = YOLO(r"C:\Users\BASHIR AHMAD\Desktop\AI project\best.pt")
+model = YOLO("best.pt")
 
 
 # Open the webcam
