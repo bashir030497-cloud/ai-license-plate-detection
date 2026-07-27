@@ -9,7 +9,7 @@ import av
 model = YOLO("best.pt")
 
 # ---- Fetch TURN credentials from Metered ----
-APP_NAME = "ai-license-plate.metered.live"      # <-- yahan apna app name daalo
+APP_NAME = "ai-license-plate"      # <-- yahan apna app name daalo
 API_KEY = "msbtQg2pGWziMrT3dE1k2nsZzDJgLj3rvYQGOO0I4slmpZpe"        # <-- yahan apni API key daalo
 
 @st.cache_resource
