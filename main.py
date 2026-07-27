@@ -10,7 +10,7 @@ model = YOLO("best.pt")
 
 # ---- Fetch TURN credentials from Metered ----
 APP_NAME = "ai-license-plate"      # apna app name
-API_KEY = "msbtQg2pGWziMrT3dE1k2nsZzDJgLj3rvYQGOO0I4slmpZpe"           # apni API key yahan daalo
+API_KEY = "gSsn5D6GYxefidkUJeEHS7qsvcre9MzepRYOl1KTzC0myaRE"           # apni API key yahan daalo
 
 @st.cache_resource
 def get_ice_servers():
