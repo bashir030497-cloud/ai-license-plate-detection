@@ -9,8 +9,8 @@ import av
 model = YOLO("best.pt")
 
 # ---- Twilio credentials from Streamlit Secrets ----
-ACCOUNT_SID = st.secrets["ACCOUNT_SID"]
-AUTH_TOKEN = st.secrets["AUTH_TOKEN"]
+ACCOUNT_SID = "SKef9e99fc1cff19f308dce86ca42c0483"
+AUTH_TOKEN = "jVP2OmrqF2VsObHfFEWNoVwBBcTC5pVJ"
 
 @st.cache_resource
 def get_ice_servers():
