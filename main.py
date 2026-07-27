@@ -9,17 +9,18 @@ import av
 model = YOLO("best.pt")
 
 # ---- Fetch TURN credentials from Metered ----
-APP_NAME = "ai-license-plate"      # <-- yahan apna app name daalo
-API_KEY = "msbtQg2pGWziMrT3dE1k2nsZzDJgLj3rvYQGOO0I4slmpZpe"        # <-- yahan apni API key daalo
+APP_NAME = "ai-license-plate"      # apna app name
+API_KEY = "msbtQg2pGWziMrT3dE1k2nsZzDJgLj3rvYQGOO0I4slmpZpe"           # apni API key yahan daalo
 
 @st.cache_resource
 def get_ice_servers():
     url = f"https://{APP_NAME}.metered.live/api/v1/turn/credentials?apiKey={API_KEY}"
-    response = requests.get(url)
+    response = requests.get(url, timeout=10)
     ice_servers = response.json()
     return ice_servers
 
 ice_servers = get_ice_servers()
+st.write("DEBUG:", ice_servers)   # temporary debug line - baad mein hata denge
 
 RTC_CONFIGURATION = RTCConfiguration({
     "iceServers": ice_servers,
