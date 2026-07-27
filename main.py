@@ -1,26 +1,24 @@
 import streamlit as st
 import cv2
 import numpy as np
-import requests
 from ultralytics import YOLO
 from streamlit_webrtc import webrtc_streamer, VideoProcessorBase, RTCConfiguration
+from twilio.rest import Client
 import av
 
 model = YOLO("best.pt")
 
-# ---- Fetch TURN credentials from Metered ----
-APP_NAME = "ai-license-plate"      # apna app name
-API_KEY = "gSsn5D6GYxefidkUJeEHS7qsvcre9MzepRYOl1KTzC0myaRE"           # apni API key yahan daalo
+# ---- Twilio credentials ----
+ACCOUNT_SID = "AC519fe8501286de2e1ac961f4ce9f5d3f"   # tumhara SID (already daal diya)
+AUTH_TOKEN = "39bf45a0b36e1dab195996bc08f899e3"            # <-- yahan apni Auth Token paste karo
 
 @st.cache_resource
 def get_ice_servers():
-    url = f"https://{APP_NAME}.metered.live/api/v1/turn/credentials?apiKey={API_KEY}"
-    response = requests.get(url, timeout=10)
-    ice_servers = response.json()
-    return ice_servers
+    client = Client(ACCOUNT_SID, AUTH_TOKEN)
+    token = client.tokens.create()
+    return token.ice_servers
 
 ice_servers = get_ice_servers()
-st.write("DEBUG:", ice_servers)   # temporary debug line - baad mein hata denge
 
 RTC_CONFIGURATION = RTCConfiguration({
     "iceServers": ice_servers,
