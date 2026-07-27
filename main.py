@@ -8,7 +8,7 @@ import av
 
 model = YOLO("best.pt")
 
-# ---- Twilio credentials ----
+# ---- Twilio credentials from Streamlit Secrets ----
 ACCOUNT_SID = st.secrets["ACCOUNT_SID"]
 AUTH_TOKEN = st.secrets["AUTH_TOKEN"]
 
