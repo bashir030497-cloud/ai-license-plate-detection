@@ -8,9 +8,9 @@ import av
 
 model = YOLO("best.pt")
 
-# ---- Twilio credentials from Streamlit Secrets ----
-ACCOUNT_SID = "SKef9e99fc1cff19f308dce86ca42c0483"
-AUTH_TOKEN = "jVP2OmrqF2VsObHfFEWNoVwBBcTC5pVJ"
+# ---- Twilio credentials ----
+ACCOUNT_SID = "AC519fe8501286de2e1ac961f4ce9f5d3f"   # tumhara SID (already daal diya)
+AUTH_TOKEN = "9bcd1f329958c6ca2894bc6af39587b3"            # <-- yahan apni Auth Token paste karo
 
 @st.cache_resource
 def get_ice_servers():
