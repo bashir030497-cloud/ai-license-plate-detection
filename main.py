@@ -1,16 +1,43 @@
 import streamlit as st
-import cv2
-import numpy as np
+import av
 from ultralytics import YOLO
 from streamlit_webrtc import webrtc_streamer, VideoProcessorBase, RTCConfiguration
 from twilio.rest import Client
-import av
 
-model = YOLO("best.pt")
+# ============================
+# Streamlit Page Configuration
+# ============================
 
-# ---- Twilio credentials ----
-ACCOUNT_SID = "AC519fe8501286de2e1ac961f4ce9f5d3f"   # tumhara SID (already daal diya)
-AUTH_TOKEN = "9bcd1f329958c6ca2894bc6af39587b3"            # <-- yahan apni Auth Token paste karo
+st.set_page_config(
+    page_title="AI License Plate Detection",
+    page_icon="🚗",
+    layout="wide"
+)
+
+st.title("🚗 AI License Plate Detection")
+st.write("Real-time License Plate Detection using YOLOv8")
+
+# ============================
+# Load YOLO Model
+# ============================
+
+@st.cache_resource
+def load_model():
+    return YOLO("best.pt")
+
+model = load_model()
+
+# ============================
+# Twilio Credentials
+# (Stored in Streamlit Secrets)
+# ============================
+
+ACCOUNT_SID = st.secrets["TWILIO_ACCOUNT_SID"]
+AUTH_TOKEN = st.secrets["TWILIO_AUTH_TOKEN"]
+
+# ============================
+# ICE Servers
+# ============================
 
 @st.cache_resource
 def get_ice_servers():
@@ -18,25 +45,42 @@ def get_ice_servers():
     token = client.tokens.create()
     return token.ice_servers
 
-ice_servers = get_ice_servers()
+RTC_CONFIGURATION = RTCConfiguration(
+    {
+        "iceServers": get_ice_servers(),
+        "iceTransportPolicy": "relay",
+    }
+)
 
-RTC_CONFIGURATION = RTCConfiguration({
-    "iceServers": ice_servers,
-    "iceTransportPolicy": "relay",
-})
+# ============================
+# Video Processor
+# ============================
 
 class PlateDetector(VideoProcessorBase):
-    def recv(self, frame):
-        img = frame.to_ndarray(format="bgr24")
-        results = model(img)
-        annotated = results[0].plot()
-        return av.VideoFrame.from_ndarray(annotated, format="bgr24")
 
-st.title("AI License Plate Detection")
+    def recv(self, frame):
+
+        image = frame.to_ndarray(format="bgr24")
+
+        results = model(image)
+
+        annotated = results[0].plot()
+
+        return av.VideoFrame.from_ndarray(
+            annotated,
+            format="bgr24"
+        )
+
+# ============================
+# Webcam
+# ============================
 
 webrtc_streamer(
-    key="plate-detection",
-    video_processor_factory=PlateDetector,
+    key="license-plate",
     rtc_configuration=RTC_CONFIGURATION,
-    media_stream_constraints={"video": True, "audio": False},
+    video_processor_factory=PlateDetector,
+    media_stream_constraints={
+        "video": True,
+        "audio": False,
+    },
 )
